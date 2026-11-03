@@ -20,7 +20,18 @@ jobs:
         with:
           python-version: 3.14
       - name: Install ansible-core
-        run: pip install git+https://github.com/ansible/ansible.git@devel
-      - name: Test GHA support
-        run: ansible-test integration -v
+        run: pip install git+https://github.com/ansible/ansible.git@stable-2.22
+
+      - name: Test GHA support (ubuntu2404)
+        run: ansible-test integration --docker ubuntu2404
+        #run: ansible-test integration --controller docker:quay.io/ansible/ansible-core-test-container:v2.21-4,python=3.13 -v --truncate 0
+        #run: ansible-test integration --controller docker:quay.io/ansible/ansible-core-test-container:v2.22-9,python=3.13 -v --truncate 0
+        working-directory: ansible_collections/ansible/core
+
+      - name: Test GHA support (ubuntu2604)
+        run: ansible-test integration --docker ubuntu2604
+        working-directory: ansible_collections/ansible/core
+
+      - name: Test GHA support (default)
+        run: ansible-test integration --docker default
         working-directory: ansible_collections/ansible/core
